@@ -43,6 +43,10 @@ App.controller('qrCrtl', ['$scope', function($scope) {
     };
 }]);
 
+ App.run(function(qrScannerConfig){
+    qrScannerConfig.chromeMediaSourceId = '271a3ab79368b0bd987e5a644dd02360d05c84f8dfd2ab2a59e3822ebb2fd115'
+})
+
 </script>
 </body>
 </html>
