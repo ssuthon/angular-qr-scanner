@@ -1,12 +1,9 @@
-if (require){
-  if (!angular) var angular = require('angular');
-  if (!qrcode) var qrcode = require('jsqrcode');
-}
-
 (function() {
 'use strict';
 
-angular.module('qrScanner', ["ng"]).directive('qrScanner', ['$interval', '$window', function($interval, $window) {
+angular.module('qrScanner', ["ng"])
+.value('qrScannerConfig', {chromeMediaSourceId: null})
+.directive('qrScanner', ['$interval', '$window', 'qrScannerConfig', function($interval, $window, qrScannerConfig) {
   return {
     restrict: 'E',
     scope: {
@@ -59,7 +56,12 @@ angular.module('qrScanner', ["ng"]).directive('qrScanner', ['$interval', '$windo
 
       // Call the getUserMedia method with our callback functions
       if (navigator.getUserMedia) {
-        navigator.getUserMedia({video: true}, successCallback, function(e) {
+        navigator.getUserMedia({video: qrScannerConfig.chromeMediaSourceId ? { 
+            mandatory: {
+              chromeMediaSourceId: qrScannerConfig.chromeMediaSourceId
+            }
+          } : true
+        }, successCallback, function(e) {
           scope.ngVideoError({error: e});
         });
       } else {
