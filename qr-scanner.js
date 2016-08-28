@@ -2,14 +2,14 @@
 'use strict';
 
 angular.module('qrScanner', ["ng"])
-.value('qrScannerConfig', {chromeMediaSourceId: null})
 .directive('qrScanner', ['$interval', '$window', 'qrScannerConfig', function($interval, $window, qrScannerConfig) {
   return {
     restrict: 'E',
     scope: {
       ngSuccess: '&ngSuccess',
       ngError: '&ngError',
-      ngVideoError: '&ngVideoError'
+      ngVideoError: '&ngVideoError',
+      mediaSourceId: '@'
     },
     link: function(scope, element, attrs) {
     
@@ -54,13 +54,13 @@ angular.module('qrScanner', ["ng"])
         stopScan = $interval(scan, 500);
       }
 
+      var video_value = scope.mediaSourceId ? { 
+                        mandatory: { chromeMediaSourceId: scope.mediaSourceId } 
+                      } : true;
       // Call the getUserMedia method with our callback functions
       if (navigator.getUserMedia) {
-        navigator.getUserMedia({video: qrScannerConfig.chromeMediaSourceId ? { 
-            mandatory: {
-              chromeMediaSourceId: qrScannerConfig.chromeMediaSourceId
-            }
-          } : true
+        navigator.getUserMedia({
+          video: video_value
         }, successCallback, function(e) {
           scope.ngVideoError({error: e});
         });
