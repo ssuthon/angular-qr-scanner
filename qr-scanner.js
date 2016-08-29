@@ -2,7 +2,7 @@
 'use strict';
 
 angular.module('qrScanner', ["ng"])
-.directive('qrScanner', ['$interval', '$window', 'qrScannerConfig', function($interval, $window, qrScannerConfig) {
+.directive('qrScanner', ['$interval', '$window', function($interval, $window) {
   return {
     restrict: 'E',
     scope: {
@@ -36,7 +36,7 @@ angular.module('qrScanner', ["ng"])
     
       var scan = function() {
         if ($window.localMediaStream) {
-          context.drawImage(video, 0, 0, 307,250);
+          context.drawImage(video, 0, 0, width, height);
           try {
             qrcode.decode();
           } catch(e) {
@@ -74,7 +74,7 @@ angular.module('qrScanner', ["ng"])
 
       element.bind('$destroy', function() {
         if ($window.localMediaStream) {
-          $window.localMediaStream.stop();
+          $window.localMediaStream.getVideoTracks()[0].stop()
         }
         if (stopScan) {
           $interval.cancel(stopScan);
